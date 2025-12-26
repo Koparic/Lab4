@@ -18,23 +18,24 @@ namespace StoreApp
             RowStyles.Add(new RowStyle(SizeType.AutoSize, 100F));
             Dock = DockStyle.Fill;
             AutoScroll = true;
-            products.Add(new ProductClass("1", 8, "a", 100));
-            products.Add(new ProductClass("2", 8, "a", 200));
-            products.Add(new ProductClass("3", 8, "a", 400));
-            products.Add(new ProductClass("4", 8, "a", 110));
-            products.Add(new ProductClass("5", 8, "a", 400));
-            products.Add(new ProductClass("6", 8, "a", 100000));
-            CatalogListUpdate(products);
+
+            products.Add(new ProductClass("Куст1", 8, "a", 100));
+            products.Add(new ProductClass("Куст2", 8, "a", 200));
+            products.Add(new ProductClass("Цветочек", 8, "a", 400));
+            products.Add(new ProductClass("Цветок", 8, "a", 110));
+            products.Add(new ProductClass("Цветище", 8, "a", 400));
+            products.Add(new ProductClass("Гладиолус", 8, "a", 100000));
+            //CatalogListUpdate(products);
         }
 
-        public void CatalogListUpdate(List<ProductClass> products)
+        public void CatalogListUpdate(ShoppingCart shoppingCart)
         {
             int rowIndex = 0;
             int colIndex = 0;
             this.Controls.Clear();
             foreach (var product in products)
             {
-                var card = new ProductCard(product.name, product.price.ToString(), Properties.Resources.Flower);
+                var card = new ProductCard(product, shoppingCart);
                 this.Controls.Add(card, colIndex++, rowIndex);
 
                 if (colIndex >= this.ColumnCount)

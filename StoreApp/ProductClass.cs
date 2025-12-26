@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,16 +10,19 @@ namespace StoreApp
     public class ProductClass
     {
         public string name { get; private set; }
+        public string description { get; private set; }
         public int availableNum { get; private set; }
         public string category { get; private set; }
-        public int price { get; private set; }
+        public float price { get; private set; }
+        public Image image { get; private set; }
 
-        public ProductClass(string name, int avNum, string category, int price)
+        public ProductClass(string name, int availableNum, string category, float price)
         {
             this.name = name;
-            this.availableNum = avNum;
+            this.availableNum = availableNum;
             this.category = category;
             this.price = price;
+            image = Properties.Resources.Flower;
         }
     }
 }
