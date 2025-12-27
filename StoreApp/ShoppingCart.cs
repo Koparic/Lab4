@@ -11,22 +11,48 @@ namespace StoreApp
     public class ShoppingCart : UserControl
     {
         private DataGridView cartGrid;
-        private OrderManager orderManager;
-        private OrderClass order = new OrderClass(0, new List<(ProductClass, int)>(), "");
+        private OrderClass order;
 
-        public ShoppingCart(OrderManager orderM)
+        public ShoppingCart()
         {
-            orderManager = orderM;
+            order = new OrderClass(0, new List<(ProductClass, int)>(), "Коментарий к заказу", "Ваш Адресс");
+            cartGrid = new DataGridView();
+            cartGrid.Dock = DockStyle.Fill;
+            cartGrid.ReadOnly = true;
+            cartGrid.AllowUserToAddRows = false;
+            cartGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            cartGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            cartGrid.Columns.Add("Name", "Название");
+            cartGrid.Columns.Add("Quantity", "Количество");
+            cartGrid.Columns.Add("Total", "Сумма");
+
+            Controls.Add(cartGrid);
+        }
+        public ShoppingCart(OrderClass order)
+        {
+            this.order = order;
             cartGrid = new DataGridView();
             cartGrid.Dock = DockStyle.Fill;
             cartGrid.ReadOnly = true;
             cartGrid.AllowUserToAddRows = false;
             cartGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            // Колонки для отображения товаров
             cartGrid.Columns.Add("Name", "Название");
             cartGrid.Columns.Add("Quantity", "Количество");
             cartGrid.Columns.Add("Total", "Сумма");
+
+
+            cartGrid.Rows.Clear();
+            float sum = 0;
+            int num = 0;
+            foreach ((ProductClass pr, int n) p in order.products)
+            {
+                sum += p.pr.price * p.n;
+                num += p.n;
+                cartGrid.Rows.Add(p.pr.name, p.n.ToString() + " шт.", (p.pr.price * p.n).ToString()+ " руб.");
+            }
+            cartGrid.Rows.Add("Итого:", num.ToString()+" шт.", sum.ToString()+" руб.");
 
             Controls.Add(cartGrid);
         }
@@ -35,23 +61,27 @@ namespace StoreApp
         {
             order.UpdateProduct(item, quantity);
             cartGrid.Rows.Clear();
+            float sum = 0;
+            int num = 0;
             foreach ((ProductClass pr, int n) p in order.products)
-                cartGrid.Rows.Add(p.pr.name, p.n, p.pr.price * p.n);
+            {
+                sum += p.pr.price * p.n;
+                num += p.n;
+                cartGrid.Rows.Add(p.pr.name, p.n.ToString() + " шт.", (p.pr.price * p.n).ToString() + " руб.");
+            }
+            cartGrid.Rows.Add("Итого:", num.ToString() + " шт.", sum.ToString() + " руб.");
+
         }
 
         public void ClearItems()
         {
-            order = new OrderClass(0, new List<(ProductClass, int)>(), "");
+            order = new OrderClass(0, new List<(ProductClass, int)>(), "Коментарий к заказу", "Ваш Адресс");
             cartGrid.Rows.Clear();
         }
 
-        public void AddOrderToManager()
+        public OrderClass GetOrder()
         {
-            if (order.products.Count > 0)
-            {
-                orderManager.AddOrder(order);
-                order = new OrderClass(0, new List<(ProductClass, int)>(), "");
-            }
+            return order;
         }
     }
 }
