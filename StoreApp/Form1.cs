@@ -22,7 +22,7 @@ namespace StoreApp
         SplitContainer splitContainer = new SplitContainer();
 
         public OrderManager orderManager { get; private set; } = new OrderManager();
-
+        public ProductManager productManager { get; private set; } = new ProductManager();
         
         public Form1()
         {
@@ -34,17 +34,19 @@ namespace StoreApp
             tabControl.TabPages.Add("Менеджмент заказов");
             Controls.Add(tabControl);
 
-            //orderManager.LoadOrders();
+            orderManager.LoadOrders();
 
             ConfigureAssortmentPage(tabControl.TabPages[0]);
             ConfigureOrdersManagementPage(tabControl.TabPages[1]);
+            UpdateOrderLists();
         }
 
 
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            //orderManager.SaveOrders();
+            orderManager.SaveOrders();
+            productManager.SaveProductsBase();
         }
 
 
@@ -83,14 +85,14 @@ namespace StoreApp
             actionPanel.Controls.Add(buttonSubmit);
             actionPanel.Controls.Add(buttonClear);
 
-            shoppingCart = new ShoppingCart();
+            shoppingCart = new ShoppingCart(productManager);
             shoppingCart.Dock = DockStyle.Fill;
             splitContainer.Panel2.Controls.Add(shoppingCart);
             splitContainer.Panel2.Controls.Add(actionPanel);
 
             catalogPanel = new CatalogPanel();
             catalogPanel.Dock = DockStyle.Fill;
-            catalogPanel.CatalogListUpdate(shoppingCart);
+            catalogPanel.CatalogListUpdate(shoppingCart, productManager);
             splitContainer.Panel1.Controls.Add(catalogPanel);
 
 
@@ -143,7 +145,7 @@ namespace StoreApp
             OrderClass order = shoppingCart.GetOrder();
             if (order.products.Count > 0)
             {
-                using (OrderMakingForm form = new OrderMakingForm(order))
+                using (OrderMakingForm form = new OrderMakingForm(order, productManager))
                 {
                     DialogResult result = form.ShowDialog();
 
@@ -153,7 +155,7 @@ namespace StoreApp
                         orderManager.AddOrder(order);
                         UpdateOrderLists();
                         shoppingCart.ClearItems();
-                        catalogPanel.CatalogListUpdate(shoppingCart);
+                        catalogPanel.CatalogListUpdate(shoppingCart, productManager);
                         MessageBox.Show("Заказ подтвержден!");
                     }
                     else if (result == DialogResult.Cancel)
@@ -167,7 +169,7 @@ namespace StoreApp
         private void OnClearClick(object sender, EventArgs e)
         {
             shoppingCart.ClearItems();
-            catalogPanel.CatalogListUpdate(shoppingCart);
+            catalogPanel.CatalogListUpdate(shoppingCart, productManager);
         }
 
         private void OnClosedListSelect(object sender, EventArgs e)

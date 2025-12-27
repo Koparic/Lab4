@@ -30,6 +30,36 @@ namespace StoreApp
                 return $"Order #{id}, Products: {numOfProd}, Address: {address}";
             }
         }
+        public void SaveOrders()
+        {
+            string filePath = "OrdersHistory.json";
+            using (StreamWriter writer = File.CreateText(filePath))
+            {
+                string json = JsonConvert.SerializeObject(orders, Newtonsoft.Json.Formatting.Indented);
+                writer.Write(json);
+            }
+        }
+
+        public void LoadOrders()
+        {
+            string filePath = "OrdersHistory.json";
+            if (File.Exists(filePath))
+            {
+                using (StreamReader reader = File.OpenText(filePath))
+                {
+                    string json = reader.ReadToEnd();
+                    orders.Clear();
+                    try
+                    {
+                        orders = JsonConvert.DeserializeObject<List<OrderClass>>(json);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Заказы не смогли загрузиться " + ex.Message);
+                    }
+                }
+            }
+        }
 
         public void AddOrder(OrderClass order)
         {

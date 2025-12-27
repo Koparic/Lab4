@@ -16,9 +16,9 @@ namespace StoreApp
         private Label lblQuantity;
         private int quantity = 0;
 
-        ProductClass product;
+        private ProductClass product;
         private ShoppingCart shoppingCart;
-        public ProductCard(ProductClass product, ShoppingCart shoppingCart)
+        public ProductCard(ProductClass product, Image image, ShoppingCart shoppingCart)
         {
             this.product = product;
             this.shoppingCart = shoppingCart;
@@ -31,7 +31,7 @@ namespace StoreApp
 
             PictureBox pictureBox = new PictureBox
             {
-                Image = product.image,
+                Image = image,
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Width = 120,
                 Height = 120,

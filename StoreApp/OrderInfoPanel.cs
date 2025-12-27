@@ -40,7 +40,7 @@ namespace StoreApp
                 };
                 this.Controls.Add(addressLabel);
 
-                shoppingCart = new ShoppingCart(order)
+                shoppingCart = new ShoppingCart(order, form.productManager)
                 {
                     Dock = DockStyle.Top
                 };

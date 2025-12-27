@@ -14,15 +14,14 @@ namespace StoreApp
         public int availableNum { get; private set; }
         public string category { get; private set; }
         public float price { get; private set; }
-        public Image image { get; private set; }
 
-        public ProductClass(string name, int availableNum, string category, float price)
+        public ProductClass(string name, string description, int availableNum, string category, float price)
         {
             this.name = name;
+            this.description = description;
             this.availableNum = availableNum;
             this.category = category;
             this.price = price;
-            image = Properties.Resources.Flower;
         }
     }
 }

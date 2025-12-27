@@ -9,12 +9,12 @@ namespace StoreApp
     public class OrderClass
     {
         public int id { get; private set; }
-        public List<(ProductClass pr, int n)> products { get; private set; } = new List<(ProductClass pr, int n)>();
+        public List<(string name, int n)> products { get; private set; } = new List<(string, int)>();
         public string adress { get; private set; }
         public string comment { get; private set; }
         public bool isClosed { get; private set; }
 
-        public OrderClass(int id, List<(ProductClass pr, int n)> products, string comment, string adress, bool isClosed = false)
+        public OrderClass(int id, List<(string name, int n)> products, string comment, string adress, bool isClosed = false)
         {
             this.id = id;
             this.products = products;
@@ -25,7 +25,7 @@ namespace StoreApp
 
         public void UpdateOrderAddress(string adress, string comment)
         {
-            if (comment == null || comment.Length == 0)
+            if (comment == "Комментарий к заказу..." || comment.Length == 0)
             {
                 comment = "Комментарий отсутствует";
             }
@@ -34,21 +34,21 @@ namespace StoreApp
         }
 
 
-        public void UpdateProduct(ProductClass product, int num)
+        public void UpdateProduct(string productName, int num)
         {
             for (int i = 0; i < products.Count; i++)
-                if (products[i].pr == product)
+                if (products[i].name == productName)
                 {
                     if (num == 0)
                     {
                         products.RemoveAt(i);
                         return;
                     }
-                    products[i] = (product, num);
+                    products[i] = (productName, num);
                     return;
                 }
             if (num != 0)
-                products.Add((product, num));
+                products.Add((productName, num));
         }
     }
 }

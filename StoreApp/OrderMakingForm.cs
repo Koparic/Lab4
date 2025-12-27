@@ -16,7 +16,7 @@ namespace StoreApp
         public TextBox addressTextBox;
         public TextBox commentTextBox;
 
-        public OrderMakingForm(OrderClass order)
+        public OrderMakingForm(OrderClass order, ProductManager productManager)
         {
             InitializeComponent();
 
@@ -26,7 +26,7 @@ namespace StoreApp
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
 
-            shoppingCart = new ShoppingCart(order);
+            shoppingCart = new ShoppingCart(order, productManager);
             shoppingCart.Dock = DockStyle.Top;
             this.Controls.Add(shoppingCart);
 
